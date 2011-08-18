@@ -36,12 +36,13 @@ def do(svn, git, *branches):
         for tag_branch in tag_branches:
             matched = tag_re.match(tag_branch)
             if matched:
-                tag = matched.group(1)
-                print 'making tag %s' % tag
-                os.system('git checkout -b tag_x remotes/%s' % tag_branch)
-                os.system('git checkout master')
-                os.system('git tag %s tag_x' % tag)
-                os.system('git branch -D tag_x')
+                if not '@' in tag_branch:
+                    tag = matched.group(1)
+                    print 'making tag %s' % tag
+                    os.system('git checkout -b tag_x remotes/%s' % tag_branch)
+                    os.system('git checkout master')
+                    os.system('git tag %s tag_x' % tag)
+                    os.system('git branch -D tag_x')
         for branch in branches:
             print 'creating branch %s' % branch
             os.system('git checkout -b %s remotes/%s' % (branch, branch))
